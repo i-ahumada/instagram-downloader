@@ -14,7 +14,7 @@ def download_all(username):
 # -- DOWNLOAD LAST N POSTS FROM USERNAME --
 def download_last_n(username, n):
     os.system('color')
-    path = os.getcwd() + '/downloads/@{target}/posts/'
+    path = os.getcwd() + '/downloads/@{target}/'
     L =  instaloader.Instaloader(dirname_pattern=path)
     profile = instaloader.Profile.from_username(L.context, username)
     posts = profile.get_posts()
@@ -42,7 +42,7 @@ def download_last_n(username, n):
 
 # -- DOWNLOAD FROM URL --
 def download_from_url(url):
-    path = os.getcwd() + '/downloads/@{target}/posts/'
+    path = os.getcwd() + '/downloads/@{target}/'
     L = instaloader.Instaloader(dirname_pattern=path)
     post = instaloader.Post.from_shortcode(L.context, url.split("/")[-2])
     L.download_post(post, post.owner_username)
