@@ -40,9 +40,9 @@ def download_last_n(username, n):
     else:
         print('\x1b[6;30;42m' + '||||||  DESCARGADO: [' + username + ': '+ str((n,len(last_posts))[len(last_posts) < n]) +' posts]  ||||||' + '\x1b[0m')
 
-users = ("ndalfonsin", "ivan.ahumada_", "apoptica", "ajshdjklwqjlksahd", "pao_mazza_atelier_de_tortas")
-
-for user in users:
-    download_last_n(user, 10)
-
-
+# -- DOWNLOAD FROM URL --
+def download_from_url(url):
+    path = os.getcwd() + '/downloads/@{target}/posts/'
+    L = instaloader.Instaloader(dirname_pattern=path)
+    post = instaloader.Post.from_shortcode(L.context, url.split("/")[-2])
+    L.download_post(post, post.owner_username)
