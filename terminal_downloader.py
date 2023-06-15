@@ -1,7 +1,8 @@
 import downloader_funcs as mydownloader
 import os
+# for color on terminal
 os.system('color')
-ans = ""
+
 def menu():
     print('Select (by typing the colored numbers) one of the next options to operate')
     print('\x1b[3;33;40m'+ '- 1' +'\x1b[0m' + ' downloads directly from url')
@@ -9,7 +10,9 @@ def menu():
     print('\x1b[3;33;40m'+ '- 3' +'\x1b[0m' + ' downloads first n images by username (up to 6 months from today)')
     print('\x1b[3;33;40m'+ '- 4' +'\x1b[0m' + ' downloads first n images by username from a file (up to 6 months from today)')
     print('\x1b[7;30;41m'+ '- 5' +'\x1b[0m' + ' exit')
+
 menu()
+# ans goes trhough only if input is a valid option
 incorrect_input = True
 while incorrect_input:
     ans = input('-> ').strip()
@@ -23,7 +26,10 @@ while incorrect_input:
     
 
 while ans != 5:
+    # controls json and metadata excluding loop
     downloads_happened = False
+    
+    # -- 1 - DOWNLOAD URL --
     if(ans == 1):
         url = input('Input url: ')
         try:
@@ -35,10 +41,13 @@ while ans != 5:
         else:
             print('\x1b[6;30;42m'+ "||||||  POST DOWNLOADED  ||||||" +'\x1b[0m')
             
+    # -- 2 - DOWNLOAD URLS FILE --
     elif(ans == 2):
         folder_path = os.path.join(os.getcwd(), 'link_folder')
         filename = input('Input file name with extension: ')
         path =  os.path.join(folder_path, filename)
+        
+        # check valid path
         if os.path.exists(path):
             archivo = open(path,"rt")
             downloads_counter = 0
@@ -53,16 +62,20 @@ while ans != 5:
         else:
             print('\x1b[1;37;41m'+ '||||||  NO FILE FOUND AS ['+ filename +'] IN ['+ folder_path +']   ||||||' +'\x1b[0m')
             
+    # -- 1 - DOWNLOAD N IMAGES BY USERNAME --
     elif(ans == 3):
         username = input("Input username: ")
         n = input("Input number of images from last uploaded: ")
         downloads_happened = True
         mydownloader.download_last_n(username, int(n))
         
+    # -- 1 - DOWNLOAD N IMAGES BY USERNAME FROM FILE --
     elif(ans == 4):
         folder_path = os.path.join(os.getcwd(), 'user_folder')
         filename = input('Input file name with extension: ')
         path =  os.path.join(folder_path, filename)
+        
+        # check valid path
         if os.path.exists(path):
             n = input('Input number of images from last uploaded: ')
             archivo = open(path,"rt")
@@ -76,13 +89,16 @@ while ans != 5:
         else:
             print('\x1b[1;37;41m'+ '||||||  NO FILE FOUND AS ['+ filename +'] IN ['+ folder_path +']   ||||||' +'\x1b[0m' + '')
             
+    # filter images and videos if there were downloads
     if downloads_happened:
         downloads_folder_path = os.path.join(os.getcwd(), 'downloads')
+        # downloads_folder is a direction iterator
         downloads_folder = os.listdir(downloads_folder_path)
         
         for folder_name in downloads_folder:
             
             folder_path = os.path.join(downloads_folder_path, folder_name)
+            # folder is a direction iterator
             folder = os.listdir(folder_path)
             
             for file in folder:
@@ -90,6 +106,7 @@ while ans != 5:
                     os.remove(os.path.join(folder_path, file))
     
     menu()
+    # ans goes trhough only if input is a valid option
     incorrect_input = True
     while incorrect_input:
         ans = input('-> ').strip()
