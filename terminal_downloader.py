@@ -58,7 +58,7 @@ while ans != 5:
                     mydownloader.download_from_url(url)
                 except mydownloader.instaloader.InstaloaderException as ie:
                     print(ie)
-            print('\x1b[6;30;42m'+ '||||||  ' + str(downloads_counter) + " IMAGES DOWNLOADED  ||||||" + '\x1b[0m')
+            print('\x1b[6;30;42m'+ '||||||  ' + str(downloads_counter) + " POSTS DOWNLOADED  ||||||" + '\x1b[0m')
         else:
             print('\x1b[1;37;41m'+ '||||||  NO FILE FOUND AS ['+ filename +'] IN ['+ folder_path +']   ||||||' +'\x1b[0m')
             
@@ -79,13 +79,26 @@ while ans != 5:
         if os.path.exists(path):
             n = input('Input number of images from last uploaded: ')
             archivo = open(path,"rt")
-            for username in archivo:
+            for username_target in archivo:
                 downloads_happened = True
-                username = username.strip()
+                username_target = username_target.strip()
                 try:
-                    mydownloader.download_last_n(username, int(n))
+                    mydownloader.download_last_n(username_target, int(n))
                 except mydownloader.instaloader.InstaloaderException as ie:
-                    print(ie)
+                    downloads_happened = False
+                    print("Must login to try again")
+                    print("(Please do not use an important account since the account used here might be at risk of being banned)")
+                    print("Do you want to continue? (Y/N)")
+                    c = input("-> ").capitalize()
+                    if (c == "Y"):
+                        user = input("Username: ")
+                        pasw = input("Password: ")
+                        try:
+                            mydownloader.download_last_n(username_target, n, user, pasw)
+                        except mydownloader.instaloader.InstaloaderException as ie:
+                            print(ie)
+                            print("Try again later.")
+                            break
         else:
             print('\x1b[1;37;41m'+ '||||||  NO FILE FOUND AS ['+ filename +'] IN ['+ folder_path +']   ||||||' +'\x1b[0m' + '')
             

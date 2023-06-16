@@ -12,11 +12,18 @@ def download_all(username):
         L.download_post(post, target=profile.username)
 
 # -- DOWNLOAD LAST N POSTS FROM USERNAME --
-def download_last_n(username, n):
+def download_last_n(username_target, n, user="foo", contra="foo"):
     os.system('color')
     path = os.getcwd() + '/downloads/@{target}/'
     L =  instaloader.Instaloader(dirname_pattern=path)
-    profile = instaloader.Profile.from_username(L.context, username)
+    
+    if not (user == "foo" and contra == "foo"):
+        try:
+            L.login(user, contra)
+        except instaloader.InstaloaderException as ie:
+            print(ie)
+            
+    profile = instaloader.Profile.from_username(L.context, username_target)
     posts = profile.get_posts()
     
     SINCE = datetime.datetime.today()
@@ -31,14 +38,14 @@ def download_last_n(username, n):
         i = 0
         for post in last_posts:
             if(i <= n and i <= amount_posts):
-                L.download_post(post, username)
+                L.download_post(post, username_target)
             else:
                 break
             i += 1
     except Exception:
-        print('\x1b[1;37;41m' + "||||||  ERROR! ("+ Exception +")" + " [" + username + "] ||||||" + '\x1b[0m')
+        print('\x1b[1;37;41m' + "||||||  ERROR! ("+ Exception +")" + " [" + username_target + "] ||||||" + '\x1b[0m')
     else:
-        print('\x1b[6;30;42m' + '||||||  DESCARGADO: [' + username + ': '+ str((n,len(last_posts))[len(last_posts) < n]) +' posts]  ||||||' + '\x1b[0m')
+        print('\x1b[6;30;42m' + '||||||  DESCARGADO: [' + username_target + ': '+ str((n,len(last_posts))[len(last_posts) < n]) +' posts]  ||||||' + '\x1b[0m')
 
 # -- DOWNLOAD FROM URL --
 def download_from_url(url):
